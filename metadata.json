@@ -1,0 +1,5 @@
+{
+  "name": "Dime Management",
+  "description": "A comprehensive personal finance and budgeting application modeled after a robust Excel-VBA system, featuring automated tithing logic, classification-based ledgers, monthly summaries, and net worth tracking.",
+  "requestFramePermissions": []
+}
