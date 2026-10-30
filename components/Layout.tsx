@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { LayoutDashboard, ReceiptText, PieChart, Landmark, Settings, Target, CreditCard, PiggyBank, ArrowRightLeft, LogOut, User, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutDashboard, ReceiptText, PieChart, Landmark, Target, CreditCard, PiggyBank, ArrowRightLeft, LogOut, User, Menu, X, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface LayoutProps {
@@ -38,6 +38,7 @@ export const DMLogo = ({ className = "w-10 h-10" }: { className?: string }) => (
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) => {
   const { user, logout } = useAuth();
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const menuItems = [
     { id: 'dashboard', label: 'Balance Statement', icon: LayoutDashboard },
     { id: 'savings', label: 'Savings', icon: PiggyBank },
@@ -49,11 +50,28 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
     { id: 'networth', label: 'Net Worth', icon: Landmark },
   ];
 
+  // Shortcuts shown in the phone bottom bar; everything else lives behind "More"
+  const mobileTabs = [
+    { id: 'dashboard', label: 'Balance', icon: LayoutDashboard },
+    { id: 'acc-ledgers', label: 'Accounts', icon: CreditCard },
+    { id: 'budget', label: 'Budget', icon: Target },
+    { id: 'summary', label: 'Summary', icon: PieChart },
+  ];
+  const isMoreActive = !mobileTabs.some(t => t.id === activeTab);
+
+  const navigate = (tab: string) => {
+    setActiveTab(tab);
+    setIsNavOpen(false);
+  };
+
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      <aside className="w-64 bg-[#0f172a] text-white flex flex-col shrink-0 shadow-2xl z-20">
-        <div className="p-8 pb-10">
-          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setActiveTab('dashboard')}>
+    <div className="flex h-[100dvh] bg-slate-50 overflow-hidden">
+      {isNavOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 z-30 lg:hidden animate-in fade-in duration-200" onClick={() => setIsNavOpen(false)} />
+      )}
+      <aside className={`fixed inset-y-0 left-0 lg:static w-72 max-w-[85vw] lg:w-64 bg-[#0f172a] text-white flex flex-col shrink-0 shadow-2xl z-40 lg:z-20 transition-transform duration-300 lg:translate-x-0 ${isNavOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="p-8 pb-10 pt-[max(2rem,env(safe-area-inset-top))] flex items-start justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate('dashboard')}>
             <DMLogo className="w-12 h-12" />
             <div className="flex flex-col">
               <h1 className="brand-font text-xl font-extrabold leading-tight tracking-tight text-white">
@@ -64,13 +82,16 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
               </h1>
             </div>
           </div>
+          <button onClick={() => setIsNavOpen(false)} className="lg:hidden p-2 -mr-2 text-slate-400 hover:text-white" aria-label="Close menu">
+            <X size={22} />
+          </button>
         </div>
 
         <nav className="flex-1 px-5 py-2 space-y-1.5 overflow-y-auto no-scrollbar">
           {menuItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => navigate(item.id)}
               className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-xl text-sm font-bold transition-all duration-200 group ${
                 activeTab === item.id 
                   ? 'bg-blue-600 text-white shadow-xl shadow-blue-900/40 translate-x-1' 
@@ -83,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
           ))}
         </nav>
 
-        <div className="px-6 py-8 border-t border-slate-800/50 mx-4">
+        <div className="px-6 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] border-t border-slate-800/50 mx-4">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-700 shadow-xl overflow-hidden shrink-0">
               {user?.photoURL ? (
@@ -111,13 +132,21 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
       </aside>
 
       <main className="flex-1 flex flex-col overflow-hidden relative">
-        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-10">
-          <div className="flex flex-col">
-            <h2 className="brand-font text-2xl font-black text-slate-900 tracking-tight">
+        <header className="h-16 lg:h-24 box-content pt-[env(safe-area-inset-top)] bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between gap-4 px-4 lg:px-8 shrink-0 z-10">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              data-testid="open-nav"
+              onClick={() => setIsNavOpen(true)}
+              className="lg:hidden p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100"
+              aria-label="Open menu"
+            >
+              <Menu size={22} />
+            </button>
+            <h2 className="brand-font text-lg lg:text-2xl font-black text-slate-900 tracking-tight truncate">
               {menuItems.find(m => m.id === activeTab)?.label || 'Dashboard'}
             </h2>
           </div>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-8 shrink-0">
             <div className="hidden md:flex flex-col items-end">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Status</p>
               <div className="flex items-center gap-2">
@@ -134,11 +163,31 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-8 bg-[#f8fafc]">
-          <div className="max-w-[1700px] mx-auto space-y-10 pb-16 animate-in fade-in duration-500">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar p-3 sm:p-5 lg:p-8 bg-[#f8fafc]">
+          <div className="max-w-[1700px] mx-auto space-y-6 lg:space-y-10 pb-8 lg:pb-16 animate-in fade-in duration-500">
             {children}
           </div>
         </div>
+
+        <nav className="lg:hidden shrink-0 bg-white border-t border-slate-200 grid grid-cols-5 pb-[env(safe-area-inset-bottom)] z-10">
+          {mobileTabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => navigate(tab.id)}
+              className={`flex flex-col items-center gap-1 py-2.5 text-[10px] font-bold ${activeTab === tab.id ? 'text-blue-600' : 'text-slate-400'}`}
+            >
+              <tab.icon size={20} />
+              {tab.label}
+            </button>
+          ))}
+          <button
+            onClick={() => setIsNavOpen(true)}
+            className={`flex flex-col items-center gap-1 py-2.5 text-[10px] font-bold ${isMoreActive ? 'text-blue-600' : 'text-slate-400'}`}
+          >
+            <MoreHorizontal size={20} />
+            More
+          </button>
+        </nav>
       </main>
     </div>
   );

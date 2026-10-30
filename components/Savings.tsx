@@ -53,7 +53,7 @@ const Savings: React.FC<SavingsProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-            <div className="px-6 py-4 bg-emerald-50 border-b flex justify-between items-center"><h3 className="font-bold text-emerald-800 uppercase text-xs flex items-center gap-2"><PiggyBank size={16}/> Savings Fund Balances</h3>
+            <div className="px-4 sm:px-6 py-4 bg-emerald-50 border-b flex flex-wrap gap-2 justify-between items-center"><h3 className="font-bold text-emerald-800 uppercase text-xs flex items-center gap-2"><PiggyBank size={16}/> Savings Fund Balances</h3>
               <button 
                 onClick={() => setIsEditMode(!isEditMode)} 
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all ${isEditMode ? 'bg-emerald-600 text-white' : 'text-emerald-700 hover:bg-emerald-100'}`}
@@ -61,6 +61,7 @@ const Savings: React.FC<SavingsProps> = ({
                 {isEditMode ? <><Check size={12} /> Done</> : <><Pencil size={12} /> Manual Update</>}
               </button>
             </div>
+            <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-left text-sm">
               <thead className="bg-white border-b">
                 <tr>
@@ -81,7 +82,7 @@ const Savings: React.FC<SavingsProps> = ({
 
                   return (
                     <tr key={cat.id} className="hover:bg-slate-50/50 transition-colors border-l-2 border-transparent hover:border-emerald-400">
-                      <td className="px-6 py-3 text-slate-600 font-medium">{cat.name}</td>
+                      <td className="px-6 py-3 text-slate-600 font-medium whitespace-nowrap">{cat.name}</td>
                       <td className="px-6 py-3 text-right font-bold">
                         {isEditMode ? (
                           <input 
@@ -89,7 +90,7 @@ const Savings: React.FC<SavingsProps> = ({
                             step="0.01" 
                             value={cat.balance} 
                             onChange={e => setCategoryBalance(cat.id, parseFloat(e.target.value) || 0)} 
-                            className="w-full px-2 py-1 bg-emerald-50 border rounded text-right text-xs" 
+                            className="w-full min-w-[6rem] px-2 py-1 bg-emerald-50 border rounded text-right text-xs" 
                           />
                         ) : (
                           <span className={cat.balance < 0 ? 'text-red-500' : ''}>{formatCurrency(cat.balance)}</span>
@@ -119,9 +120,10 @@ const Savings: React.FC<SavingsProps> = ({
                 </tr>
               </tfoot>
             </table>
+            </div>
           </div>
         </div>
-        <div className="lg:block"><div className="sticky top-8 space-y-6">
+        <div className="lg:block"><div className="lg:sticky lg:top-8 space-y-6">
           {!isEditMode ? <TransactionPanel state={state} onAddTransaction={addTransaction} onExecuteTransfer={executeTransfer} allowedModes={['income', 'expense', 'allocation', 'transfer']} filterClassificationId={savingsClass?.id} /> : <div className="bg-white rounded-xl border-2 border-dashed p-8 text-center text-slate-400 uppercase font-black text-[10px]">Edit Mode Active</div>}
           <div className="bg-[#0f172a] rounded-xl p-6 text-slate-300 font-bold text-[11px] uppercase space-y-4 border border-slate-800"><div className="flex justify-between items-center"><h3 className="text-[10px] text-slate-500">Savings Reconciliation</h3></div>
             <div className="space-y-3">

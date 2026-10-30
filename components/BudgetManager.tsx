@@ -240,18 +240,18 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
     if (!currentCls) return null;
 
     return (
-      <div key={cls.id} className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-12">
-        <div className={`px-8 py-6 ${isIncome ? 'bg-cyan-50' : currentCls.color} border-b border-slate-200 flex justify-between items-center`}>
-          <div className="flex items-center gap-4">
+      <div key={cls.id} className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-6 lg:mb-12">
+        <div className={`px-4 sm:px-8 py-4 sm:py-6 ${isIncome ? 'bg-cyan-50' : currentCls.color} border-b border-slate-200 flex flex-wrap gap-3 justify-between items-center`}>
+          <div className="flex flex-wrap items-center gap-4">
             {isEditLayoutMode && <GripVertical size={20} className="text-slate-400" />}
             {isEditLayoutMode ? (
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <input type="text" value={currentCls.name} onChange={e => {
                   const newList = [...draftClassifications];
                   const i = newList.findIndex(d => d.id === cls.id);
                   newList[i] = { ...newList[i], name: e.target.value };
                   setDraftClassifications(newList);
-                }} className="bg-white border border-slate-200 px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-blue-500 w-64 shadow-inner" />
+                }} className="bg-white border border-slate-200 px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-blue-500 w-full sm:w-64 shadow-inner" />
                 {!isIncome && (
                   <div className="flex gap-2 bg-white/50 p-2 rounded-xl border border-white/50">
                     {COLOR_OPTIONS.slice(0, 6).map(opt => (
@@ -277,23 +277,24 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
             )}
             {isEditLayoutMode && !isIncome && renderSortButtons(cls.id, clsIdx, maxCls, 'class')}
           </div>
-          <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{isIncome ? 'Cash Inflow' : 'Strategic Allocation'}</p>
+          <p className="hidden sm:block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{isIncome ? 'Cash Inflow' : 'Strategic Allocation'}</p>
         </div>
-        <table className="w-full text-left text-base">
+        <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full text-left text-sm sm:text-base">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-8 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest">Category</th>
-              <th className="px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Budget</th>
-              {isSavings && <th className="px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Goal</th>}
-              <th className="px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Actual Inflow (CM)</th>
-              {!isIncome && <th className="px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Spent (CM)</th>}
-              <th className="px-6 py-5 w-16"></th>
+              <th className="px-4 sm:px-8 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest">Category</th>
+              <th className="px-3 sm:px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Budget</th>
+              {isSavings && <th className="px-3 sm:px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Goal</th>}
+              <th className="px-3 sm:px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Actual Inflow (CM)</th>
+              {!isIncome && <th className="px-3 sm:px-6 py-5 font-black text-slate-500 uppercase text-[11px] tracking-widest text-right">Spent (CM)</th>}
+              <th className="px-3 sm:px-6 py-5 w-16"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {catsToRender.map((cat, catIdx) => (
               <tr key={cat.id} className="hover:bg-slate-50/50 group transition-colors">
-                <td className="px-8 py-4 font-semibold text-slate-700">
+                <td className="px-4 sm:px-8 py-4 font-semibold text-slate-700">
                   {isEditLayoutMode ? (
                     <div className="flex items-center gap-6">
                       <div className="space-y-1">
@@ -302,7 +303,7 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
                           const i = newList.findIndex(c => c.id === cat.id);
                           newList[i] = { ...newList[i], name: e.target.value };
                           setDraftCategories(newList);
-                        }} className="bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-sm font-bold text-slate-700 w-48 shadow-sm" />
+                        }} className="bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-sm font-bold text-slate-700 w-36 sm:w-48 shadow-sm" />
                         <select value={cat.classificationId} onChange={e => {
                           const newList = [...draftCategories];
                           const i = newList.findIndex(c => c.id === cat.id);
@@ -316,17 +317,17 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
                     </div>
                   ) : cat.name}
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <input type="number" step="0.01" disabled={isEditLayoutMode} className={`w-32 px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-right font-black text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none ${isEditLayoutMode ? 'opacity-50' : 'hover:border-slate-300'}`} value={cat.monthlyBudget || 0} onChange={e => onUpdateBudget(cat.id, parseFloat(e.target.value) || 0)} />
+                <td className="px-3 sm:px-6 py-4 text-right">
+                  <input type="number" step="0.01" disabled={isEditLayoutMode} className={`w-24 sm:w-32 px-3 sm:px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-right font-black text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none ${isEditLayoutMode ? 'opacity-50' : 'hover:border-slate-300'}`} value={cat.monthlyBudget || 0} onChange={e => onUpdateBudget(cat.id, parseFloat(e.target.value) || 0)} />
                 </td>
                 {isSavings && (
-                  <td className="px-6 py-4 text-right">
-                    <input type="number" step="0.01" disabled={isEditLayoutMode} className={`w-32 px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-right font-black text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none ${isEditLayoutMode ? 'opacity-50' : 'hover:border-slate-300'}`} value={cat.goalAmount || 0} onChange={e => onUpdateCategoryMetadata(cat.id, { goalAmount: parseFloat(e.target.value) || 0 })} />
+                  <td className="px-3 sm:px-6 py-4 text-right">
+                    <input type="number" step="0.01" disabled={isEditLayoutMode} className={`w-24 sm:w-32 px-3 sm:px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-right font-black text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none ${isEditLayoutMode ? 'opacity-50' : 'hover:border-slate-300'}`} value={cat.goalAmount || 0} onChange={e => onUpdateCategoryMetadata(cat.id, { goalAmount: parseFloat(e.target.value) || 0 })} />
                   </td>
                 )}
-                <td className={`px-6 py-4 text-right font-bold text-lg ${isIncome ? 'text-cyan-600' : 'text-blue-600'}`}>{formatCurrency(cat.added || 0, true)}</td>
-                {!isIncome && <td className={`px-6 py-4 text-right font-bold text-lg ${cat.spent !== 0 ? 'text-red-500' : 'text-slate-400'}`}>{cat.spent === 0 ? '-' : formatCurrency(cat.spent || 0, true)}</td>}
-                <td className="px-6 py-4 text-right">
+                <td className={`px-3 sm:px-6 py-4 text-right font-bold text-lg ${isIncome ? 'text-cyan-600' : 'text-blue-600'}`}>{formatCurrency(cat.added || 0, true)}</td>
+                {!isIncome && <td className={`px-3 sm:px-6 py-4 text-right font-bold text-lg ${cat.spent !== 0 ? 'text-red-500' : 'text-slate-400'}`}>{cat.spent === 0 ? '-' : formatCurrency(cat.spent || 0, true)}</td>}
+                <td className="px-3 sm:px-6 py-4 text-right">
                   {isEditLayoutMode && <button onClick={() => setDeleteConfirm({ id: cat.id, name: cat.name, type: 'cat' })} className="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={18} /></button>}
                 </td>
               </tr>
@@ -334,32 +335,33 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
           </tbody>
           <tfoot className={`font-black ${isIncome ? 'bg-[#004d61]' : 'bg-[#0f172a]'} text-white`}>
             <tr>
-              <td className="px-8 py-8 uppercase tracking-[0.2em] text-[11px]">Subtotal: {cls.name}</td>
-              <td className="px-6 py-8 text-right text-2xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.monthlyBudget || 0), 0), true)}</td>
-              {isSavings && <td className="px-6 py-8 text-right text-2xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.goalAmount || 0), 0), true)}</td>}
-              <td className="px-6 py-8 text-right text-xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.added || 0), 0), true)}</td>
-              {!isIncome && <td className="px-6 py-8 text-right text-xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.spent || 0), 0), true)}</td>}
+              <td className="px-4 sm:px-8 py-8 uppercase tracking-[0.2em] text-[11px]">Subtotal: {cls.name}</td>
+              <td className="px-3 sm:px-6 py-8 text-right text-2xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.monthlyBudget || 0), 0), true)}</td>
+              {isSavings && <td className="px-3 sm:px-6 py-8 text-right text-2xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.goalAmount || 0), 0), true)}</td>}
+              <td className="px-3 sm:px-6 py-8 text-right text-xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.added || 0), 0), true)}</td>
+              {!isIncome && <td className="px-3 sm:px-6 py-8 text-right text-xl">{formatCurrency(catsToRender.reduce((sum, c) => sum + (c.spent || 0), 0), true)}</td>}
               <td></td>
             </tr>
           </tfoot>
         </table>
+        </div>
       </div>
     );
   };
 
   return (
-    <div className="space-y-10 pb-40">
-      <div className="flex flex-wrap gap-5 items-center justify-between border-b border-slate-200 pb-8">
-        <div className="flex gap-4">
+    <div className="space-y-6 lg:space-y-10 pb-40">
+      <div className="flex flex-wrap gap-5 items-center justify-between border-b border-slate-200 pb-6 lg:pb-8">
+        <div className="flex flex-wrap gap-2 sm:gap-4">
           {!isEditLayoutMode ? (
             <>
-              <button onClick={() => setShowAddCat(true)} className="flex items-center gap-3 bg-[#0f172a] text-white px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl hover:bg-blue-600 transition-all active:scale-95">
+              <button onClick={() => setShowAddCat(true)} className="flex items-center gap-3 bg-[#0f172a] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl hover:bg-blue-600 transition-all active:scale-95">
                 <Plus size={18} /> Add Category
               </button>
-              <button onClick={() => setShowAddClass(true)} className="flex items-center gap-3 bg-white text-slate-800 border-2 border-slate-100 px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-sm hover:border-slate-300 transition-all active:scale-95">
+              <button onClick={() => setShowAddClass(true)} className="flex items-center gap-3 bg-white text-slate-800 border-2 border-slate-100 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-sm hover:border-slate-300 transition-all active:scale-95">
                 <Layers size={18} /> Add Group
               </button>
-              <button onClick={() => setIsEditLayoutMode(true)} className="flex items-center gap-3 px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all bg-white text-slate-500 border-2 border-slate-100 hover:border-slate-300">
+              <button onClick={() => setIsEditLayoutMode(true)} className="flex items-center gap-3 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all bg-white text-slate-500 border-2 border-slate-100 hover:border-slate-300">
                 <Settings2 size={18} /> Edit Layout
               </button>
             </>
@@ -368,14 +370,14 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
               <button 
                 onClick={handleSaveLayout} 
                 disabled={isSaving} 
-                className={`flex items-center gap-3 px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl transition-all active:scale-95 ${saveSuccess ? 'bg-green-600' : 'bg-blue-600'} text-white`}
+                className={`flex items-center gap-3 px-6 sm:px-10 py-3 sm:py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl transition-all active:scale-95 ${saveSuccess ? 'bg-green-600' : 'bg-blue-600'} text-white`}
               >
                 {isSaving ? <Loader2 size={18} className="animate-spin" /> : saveSuccess ? <CheckCircle2 size={18} /> : <Save size={18} />}
                 {isSaving ? 'Deploying...' : saveSuccess ? 'Success!' : 'Save Layout'}
               </button>
               <button 
                 onClick={() => setIsEditLayoutMode(false)} 
-                className="flex items-center gap-3 px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all bg-white text-slate-400 border-2 border-slate-100"
+                className="flex items-center gap-3 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all bg-white text-slate-400 border-2 border-slate-100"
               >
                 <X size={18} />
                 Cancel
@@ -387,10 +389,10 @@ const BudgetManager: React.FC<BudgetManagerProps> = ({
 
       {incomeClass && renderClassificationTable(incomeClass, incomeCategories, 0, 0)}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
-        <div className="bg-white p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6"><div className="p-5 bg-blue-50 text-blue-600 rounded-2xl"><Target size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Budgeted Inflow</p><p className="text-3xl font-black text-slate-900">{formatCurrency(totalTargetIncome, true)}</p></div></div>
-        <div className="bg-white p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6"><div className="p-5 bg-green-50 text-green-600 rounded-2xl"><TrendingUp size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Budgeted</p><p className="text-3xl font-black text-slate-900">{formatCurrency(totalBudgetedExpenses, true)}</p></div></div>
-        <div className={`bg-white p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6 border-l-8 ${diff < 0 ? 'border-l-red-500' : 'border-l-green-500'}`}><div className={`p-5 rounded-2xl ${diff < 0 ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}><TrendingDown size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Remaining</p><p className="text-3xl font-black text-slate-900">{formatCurrency(diff, true)}</p></div></div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-10 mb-6 lg:mb-12">
+        <div className="bg-white p-6 lg:p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6"><div className="p-5 bg-blue-50 text-blue-600 rounded-2xl"><Target size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Budgeted Inflow</p><p className="text-2xl lg:text-3xl font-black text-slate-900">{formatCurrency(totalTargetIncome, true)}</p></div></div>
+        <div className="bg-white p-6 lg:p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6"><div className="p-5 bg-green-50 text-green-600 rounded-2xl"><TrendingUp size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Budgeted</p><p className="text-2xl lg:text-3xl font-black text-slate-900">{formatCurrency(totalBudgetedExpenses, true)}</p></div></div>
+        <div className={`bg-white p-6 lg:p-10 rounded-[2rem] border border-slate-200 shadow-xl flex items-center gap-6 border-l-8 ${diff < 0 ? 'border-l-red-500' : 'border-l-green-500'}`}><div className={`p-5 rounded-2xl ${diff < 0 ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}><TrendingDown size={32} /></div><div><p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Remaining</p><p className="text-2xl lg:text-3xl font-black text-slate-900">{formatCurrency(diff, true)}</p></div></div>
       </div>
 
       <div className="space-y-6">

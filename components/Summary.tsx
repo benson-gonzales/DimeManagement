@@ -343,7 +343,7 @@ const Summary: React.FC<SummaryProps> = ({ state }) => {
       {renderSection(`Net Activity Summary (${selectedYear})`, expenseCats, 'net', 'bg-slate-100')}
 
       {selectionStats && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white rounded-2xl p-4 flex items-center gap-12 border border-slate-700 shadow-2xl animate-in slide-in-from-bottom-4">
+        <div className="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white rounded-2xl p-4 flex items-center gap-5 sm:gap-12 border border-slate-700 shadow-2xl animate-in slide-in-from-bottom-4">
           <div className="flex flex-col">
             <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Active Metrics</span>
             <span className="text-xs font-bold">Sum: <span className="text-green-400">{formatCurrency(selectionStats.sum, true)}</span></span>

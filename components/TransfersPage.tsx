@@ -164,7 +164,7 @@ const TransfersPage: React.FC<TransfersPageProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Level Navigation */}
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-2 sm:gap-4 mb-4 overflow-x-auto no-scrollbar p-1 -m-1">
         {[
           { id: 'all', label: 'All Movements', icon: Layers },
           { id: 'allocations', label: 'Allocations', icon: Target },
@@ -173,7 +173,7 @@ const TransfersPage: React.FC<TransfersPageProps> = ({
           <button
             key={item.id}
             onClick={() => setTopFilter(item.id as TopFilter)}
-            className={`px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all border-2 ${
+            className={`px-4 sm:px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 sm:gap-3 whitespace-nowrap shrink-0 transition-all border-2 ${
               topFilter === item.id 
                 ? 'bg-[#0f172a] text-white border-slate-900 shadow-xl scale-105' 
                 : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'

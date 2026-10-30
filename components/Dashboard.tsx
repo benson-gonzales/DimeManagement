@@ -104,12 +104,12 @@ const Dashboard: React.FC<DashboardProps> = ({
   );
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-10 gap-8">
+    <div className="grid grid-cols-1 xl:grid-cols-10 gap-4 sm:gap-8">
       <div className="xl:col-span-7 space-y-8">
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
-          <div className="px-8 py-6 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+          <div className="px-4 sm:px-8 py-4 sm:py-6 bg-slate-50 border-b border-slate-200 flex flex-wrap gap-3 justify-between items-center">
             <h3 className="font-black text-slate-800 uppercase text-sm tracking-widest">Balance Statement</h3>
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
                <button 
                  onClick={() => setIsEditMode(!isEditMode)} 
                  className={`flex items-center gap-2 px-5 py-2 rounded-full text-[11px] font-black uppercase transition-all shadow-sm ${isEditMode ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'}`}
@@ -126,14 +126,15 @@ const Dashboard: React.FC<DashboardProps> = ({
                )}
             </div>
           </div>
+          <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left text-sm lg:text-base">
             <thead className="bg-white border-b">
               <tr>
-                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400">Category</th>
-                <th className="px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Balance</th>
-                <th className="px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Budget</th>
-                <th className="px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Added</th>
-                <th className="px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Spent</th>
+                <th className="px-4 sm:px-8 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400">Category</th>
+                <th className="px-3 sm:px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Balance</th>
+                <th className="px-3 sm:px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Budget</th>
+                <th className="px-3 sm:px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Added</th>
+                <th className="px-3 sm:px-6 py-5 text-[11px] font-black uppercase tracking-widest text-slate-400 text-right">Spent</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -142,20 +143,20 @@ const Dashboard: React.FC<DashboardProps> = ({
                 if (cats.length === 0) return null;
                 return (
                   <React.Fragment key={cls.id}>
-                    <tr className={`${cls.color} font-black text-[11px] uppercase tracking-widest`}><td colSpan={5} className="px-8 py-3.5">{cls.name}</td></tr>
+                    <tr className={`${cls.color} font-black text-[11px] uppercase tracking-widest`}><td colSpan={5} className="px-4 sm:px-8 py-3.5">{cls.name}</td></tr>
                     {cats.map(cat => (
                       <tr key={cat.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-8 py-3.5 text-slate-700 font-semibold">{cat.name}</td>
-                        <td className="px-6 py-3.5 text-right font-bold text-slate-900">
+                        <td className="px-4 sm:px-8 py-3.5 text-slate-700 font-semibold whitespace-nowrap">{cat.name}</td>
+                        <td className="px-3 sm:px-6 py-3.5 text-right font-bold text-slate-900">
                           {isEditMode ? (
-                            <input type="number" step="0.01" value={cat.balance} onChange={e => setCategoryBalance(cat.id, parseFloat(e.target.value) || 0)} className="w-full bg-blue-50 rounded-lg text-right px-3 py-1.5 border border-blue-100 outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input type="number" step="0.01" value={cat.balance} onChange={e => setCategoryBalance(cat.id, parseFloat(e.target.value) || 0)} className="w-full min-w-[6rem] bg-blue-50 rounded-lg text-right px-3 py-1.5 border border-blue-100 outline-none focus:ring-2 focus:ring-blue-500" />
                           ) : (
                             <span className={cat.balance < 0 ? 'text-red-500' : ''}>{formatCurrency(cat.balance)}</span>
                           )}
                         </td>
-                        <td className="px-6 py-3.5 text-right text-slate-400 font-medium">{cat.monthlyBudget > 0 ? formatCurrency(cat.monthlyBudget) : '-'}</td>
-                        <td className="px-6 py-3.5 text-right text-blue-600 font-bold">{cat.monthlyAdded !== 0 ? formatCurrency(cat.monthlyAdded) : '-'}</td>
-                        <td className="px-6 py-3.5 text-right text-red-400 font-bold">{cat.monthlySpent !== 0 ? formatCurrency(cat.monthlySpent) : '-'}</td>
+                        <td className="px-3 sm:px-6 py-3.5 text-right text-slate-400 font-medium">{cat.monthlyBudget > 0 ? formatCurrency(cat.monthlyBudget) : '-'}</td>
+                        <td className="px-3 sm:px-6 py-3.5 text-right text-blue-600 font-bold">{cat.monthlyAdded !== 0 ? formatCurrency(cat.monthlyAdded) : '-'}</td>
+                        <td className="px-3 sm:px-6 py-3.5 text-right text-red-400 font-bold">{cat.monthlySpent !== 0 ? formatCurrency(cat.monthlySpent) : '-'}</td>
                       </tr>
                     ))}
                   </React.Fragment>
@@ -163,15 +164,16 @@ const Dashboard: React.FC<DashboardProps> = ({
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 
       <div className="xl:col-span-3">
-        <div className="sticky top-12 space-y-8">
+        <div className="xl:sticky xl:top-12 space-y-4 sm:space-y-8">
           <div className="rounded-3xl overflow-hidden shadow-2xl">
             {!isEditMode ? <TransactionPanel state={state} onAddTransaction={addTransaction} onExecuteTransfer={executeTransfer} /> : <div className="bg-white rounded-3xl border-4 border-dashed border-slate-100 p-12 text-center text-slate-300 font-black uppercase text-[11px] tracking-widest leading-relaxed">System Update Active</div>}
           </div>
-          <div className="bg-[#0f172a] rounded-[2rem] p-8 text-slate-300 font-bold text-xs uppercase space-y-6 shadow-2xl border border-slate-800">
+          <div className="bg-[#0f172a] rounded-[2rem] p-6 sm:p-8 text-slate-300 font-bold text-xs uppercase space-y-6 shadow-2xl border border-slate-800">
             <div className="flex justify-between items-center h-10 border-b border-slate-800 pb-2"><h3 className="text-[11px] text-slate-500 tracking-widest">Reconciliation</h3><AlertCircle size={18} className="text-slate-600"/></div>
             <div className="space-y-4">
               {reconciliation.checkingAccs.map(a => (
